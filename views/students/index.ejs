@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html class="cspio">
+<head>
+	
+	<!-- Font Awesome CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+
+	<!-- Bootstrap and default Style -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Google Fonts -->
+	<link class="gf-headline" href='https://fonts.googleapis.com/css?family=Pacifico:400&subset=' rel='stylesheet' type='text/css'>
+			
+	<!-- Animate CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css">
+	
+
+	<!-- jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+	<!-- Modernizr -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+	
+  <link rel="manifest" href="/manifest.json">
+  <script>
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('/service-worker.js');
+    }
+  </script>
+</head>
+<body>
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-md-1"></div>
+			<div class="col-md-9">
+				<div class="card card-primary">
+					<!-- Content Header (Page header) -->
+					<div class="card-header">
+						<div class="container-fluid">
+							<div class="row mb-2">
+								<div class="col-sm-9">
+									<h1 class="m-0">Students</h1>
+								</div><!-- /.col -->
+								
+							</div><!-- /.row -->
+						</div><!-- /.container-fluid -->
+					</div>
+					<!-- Begin Page Content -->
+					<div class="content">
+					
+						<div class="container-fluid">						
+					
+							<!--content row-->
+							<div class="row">
+								<div class="col-md-12">
+			
+											<table id="studentTable" class="table table-striped table-responsive">
+												<thead>
+													<tr>
+														<th>Name</th>
+														<th>Age</th>
+														<th>Phone</th>
+														<th>Address</th>
+													</tr>
+												</thead>
+												<tbody>
+
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!--./Content row-->
+					
+					
+					
+					
+					
+							<!-- Modal HTML Markup -->
+							<div id="modal_add_action" class="modal fade">
+								<div class="modal-dialog modal-lg" role="document">
+										<div class="modal-content">
+												<div class="modal-header d-block">
+													<div class="d-flex">
+														<h3 class="modal-title" id="task_title"></h3>
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																 <span aria-hidden="true">&times;</span>
+														</button>
+												</div>
+														<h6 class="h6 modal-title" id="task_description">Sub Title</h6>
+												</div>
+												<div class="modal-body">
+													<form id="addAction" method="POST" action="/api/actions">
+														<input type="text" hidden name="task_id" id="task_id">
+														<div class="formError alert alert-danger" style="display: none;"></div>
+														<div class="formSuccess alert alert-success" style="display: none;">Action Saved!</div>
+														<div class="form-group row">
+															<div class="col-sm-6 mb-3 mb-sm-0">
+																<label for="date">Date</label>
+																<input type="date" class="form-control form-control-user" id="date" name="date" readonly value="">
+															</div>
+														</div>
+														<div class="form-group row">
+															<div class="col-sm-6 mb-3 mb-sm-0">
+																<label for="title">Action title</label>
+																<input type="text" class="form-control form-control-user" id="title" name="title" required
+																	placeholder="Write Title here.....">
+															</div>
+															<div class="col-sm-6">
+																<label for="description">Action Description (optional)</label>
+																<textarea class="form-control form-control-user" id="description" name="description" placeholder="write a brief description....."></textarea>
+															</div>
+														</div>
+							
+								
+														<button type="submit" id="submit" class="btn btn-primary btn-user btn-block">
+															Add Task
+														</button>
+													</form>
+												</div>
+										</div><!-- /.modal-content -->
+								</div>
+								<!-- /.modal-dialog -->
+							</div>
+							<!-- /.modal -->
+					
+					
+					
+					<div id="modal_container">
+						
+					</div>
+					
+					
+						</div>
+						<!-- /.container-fluid -->
+					</div>
+					<!--./content-->
+			
+
+		</div>
+	</div>
+	<script>
+		const app={}
+		const loadPage = ()=>{
+			fetch('/api/students').then(resp=>resp.json())
+			.then(students=>{
+				app.students=students.students;
+				var tbodyRef = document.getElementById('studentTable').getElementsByTagName('tbody')[0];
+
+				students.students.forEach(student => {
+					console.log(student)
+					// Insert a row at the end of table
+					var newRow = tbodyRef.insertRow();
+	
+					// Insert a cell at the end of the row
+					var nameCell = newRow.insertCell().innerHTML=student.name;
+					var ageCell = newRow.insertCell().innerHTML=student.age;
+					var phoneCell = newRow.insertCell().innerHTML=student.phone;
+					var addressCell = newRow.insertCell().innerHTML=student.address;
+					newRow.insertCell().innerHTML=`<a href="/students/${student._id}">Edit Student</a>`
+				});
+
+			}).catch(err=>console.error(err))
+		}
+		window.onload = function () {
+  loadPage()
+};
+
+	</script>
+</body>
+</html>
